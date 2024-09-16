@@ -1,0 +1,5 @@
+.footer {
+    position: fixed; /* Fixa o rodapé na parte inferior da tela */
+    bottom: 0; /* Posiciona o rodapé no fundo da tela */
+  }
+  

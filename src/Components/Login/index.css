@@ -1,0 +1,133 @@
+/* Garante que o body e o html ocupem 100% da altura da tela */
+html, body {
+    height: auto;
+    margin: 0;
+}
+
+/* Centraliza o container de login vertical e horizontalmente */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura da tela */
+    background-color: #f0f0f0; /* Cor de fundo opcional para contraste */
+}
+
+/* Estilo para o container de login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(to bottom right, #ffffffcb, #e0e0e0fa); /* Gradiente suave */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    margin: 10% auto;
+    border: 2px solid #dcdcdc; /* Borda mais suave */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Estilo para o título do formulário */
+.login-container h2 {
+    color: #102144; /* Azul pastel médio */
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+/* Estilo para os inputs do formulário */
+.login-container input {
+    width: calc(100% - 20px); /* Ajusta a largura para caber com padding */
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #b2dfdb; /* Azul pastel suave */
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease, transform 0.5s ease; /* Transição suave */
+}
+
+.login-container input:focus {
+    border-color: #6797ff; /* Azul pastel claro ao focar */
+    box-shadow: 0 0 8px rgba(103, 151, 255, 0.4); /* Sombra ao focar */
+    outline: none; /* Remove o contorno padrão do navegador */
+}
+
+/* Estilo para o botão de submit */
+.login-container button {
+    width: calc(100% - 20px); /* Ajusta a largura para caber com padding */
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2f4d8b; /* Azul pastel claro */
+    color: #ffffff; /* Branco */
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições suaves */
+}
+
+.login-container button:hover {
+    background-color: #102144; /* Azul pastel médio */
+    transform: translateY(-2px); /* Efeito de elevação ao passar o mouse */
+}
+
+/* Estilo para a mensagem de erro */
+.login-container p {
+    color: #d32f2f; /* Cor vermelha para erros */
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+/* Estilo para o botão de alternância de registro/login */
+.login-container .switch-button {
+    margin-top: 15px;
+    background: none;
+    border: none;
+    color: #6797ff; /* Azul pastel claro */
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: underline; /* Sublinha o texto */
+    transition: color 0.3s ease; /* Transição suave na cor */
+}
+
+.login-container .switch-button:hover {
+    color: #ffffff; /* Azul pastel médio ao passar o mouse */
+}
+
+.btn-switch {
+    cursor: pointer;
+    margin-top: 20px;
+    color: rgb(11, 12, 88);
+    text-decoration: underline;
+}
+
+/* Classes para animação de transição entre login e registro */
+.container-transition {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Oculta o container de forma suave */
+.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* Exibe o container de forma suave */
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
