@@ -38,7 +38,7 @@ const executeQuery = (query, params, callback) => {
 };
 
 // Endpoint /query para executar qualquer consulta
-app.post('/query', (req, res) => {
+app.post('http://localhost:3001/query', (req, res) => {
   const { query, params } = req.body;
 
   if (!query) {
