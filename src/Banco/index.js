@@ -9,7 +9,7 @@ const port = 3001;
 const dbOptions = {
   host: 'localhost',
   port: 3050,
-  database: 'C:/Users/mathe/Documents/Facul/PontoDigital/Banco/TestePontoDigital.FDB',
+  database: 'C:/Banco/TestePontoDigital.FDB',
   user: 'SYSDBA',
   password: 'masterkey',
 };
