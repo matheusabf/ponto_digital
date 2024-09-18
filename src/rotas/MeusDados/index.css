@@ -1,0 +1,73 @@
+
+  
+  .meus-dados-container {
+    display: flex;
+    margin: 100px auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff; /* Fundo branco para o container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 600px; /* Ajuste o tamanho conforme necessário */
+  }
+  
+  .dados-form{
+    width:80%;
+    justify-content: center;
+  }
+
+  .titulo {
+    text-align: center;
+    color: #102144; /* Cor do texto do título */
+  }
+  
+  .input-container {
+    justify-content: inherit;
+    margin: 10px 0;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 5px;
+    color: #102144; /* Cor das labels */
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #102144; /* Bordas em azul */
+    border-radius: 4px;
+    justify-content: center;
+    background-color: rgba(16, 33, 68, 0.1); /* Fundo sutil */
+    color: #102144; /* Texto em azul */
+  }
+  
+  .input:disabled {
+    width:400px;
+    background-color: rgba(16, 33, 68, 0.2); /* Fundo sutil quando desabilitado */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100%; /* Para ocupar a largura total */
+  }
+  
+  .button {
+    text-align: center;
+    width: 120%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #102144; /* Botões em azul */
+    color: #fff; /* Texto dos botões em branco */
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0d1a2d; /* Tom de azul mais escuro ao passar o mouse */
+  }
+  

@@ -1,6 +1,6 @@
-// src/pages/MeusDados.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './index.css'; // Importando o CSS
 
 const MeusDados = () => {
   const [userData, setUserData] = useState({
@@ -14,7 +14,7 @@ const MeusDados = () => {
 
   useEffect(() => {
     const userId = localStorage.getItem('ID_USUARIO');
-    
+
     const fetchUserData = async () => {
       try {
         const response = await fetch('http://localhost:3001/query', {
@@ -31,7 +31,7 @@ const MeusDados = () => {
         if (!response.ok) {
           throw new Error('Erro ao buscar dados do usuário');
         }
-        
+
         const result = await response.json();
         if (result.success && result.data.length > 0) {
           setUserData(result.data[0]);
@@ -92,50 +92,53 @@ const MeusDados = () => {
   if (error) return <p>Erro: {error}</p>;
 
   return (
-    <div>
-      <h1>Meus Dados</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="meus-dados-container">
+      <h1 className="titulo">Meus Dados</h1>
+      <form className="dados-form" onSubmit={handleSubmit}>
+        <div className="input-container">
           <label htmlFor="login">Login:</label>
           <input
             type="text"
             id="login"
             name="login"
-            value={userData.LOGIN}
+            value={userData.login}
             onChange={handleChange}
             disabled={!isEditing}
+            className="input"
           />
         </div>
-        <div>
+        <div className="input-container">
           <label htmlFor="nome">Nome:</label>
           <input
             type="text"
             id="nome"
             name="nome"
-            value={userData.NOME}
+            value={userData.nome}
             onChange={handleChange}
             disabled={!isEditing}
+            className="input"
           />
         </div>
-        <div>
+        <div className="input-container">
           <label htmlFor="senha">Senha:</label>
           <input
             type="password"
             id="senha"
             name="senha"
-            value={userData.SENHA}
+            value={userData.senha}
             onChange={handleChange}
             disabled={!isEditing}
+            className="input"
           />
         </div>
-        <div>
+        <div className="button-container">
           {isEditing ? (
             <>
-              <button type="submit">Salvar</button>
-              <button type="button" onClick={() => setIsEditing(false)}>Cancelar</button>
+              <button type="submit" className="button">Salvar</button>
+              <button type="button" onClick={() => setIsEditing(false)} className="button">Cancelar</button>
             </>
           ) : (
-            <button type="button" onClick={() => setIsEditing(true)}>Editar</button>
+            <button type="button" onClick={() => setIsEditing(true)} className="button">Editar</button>
           )}
         </div>
       </form>

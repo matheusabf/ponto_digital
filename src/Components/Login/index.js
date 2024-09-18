@@ -46,7 +46,7 @@ const Login = () => {
 
     const query = `
       INSERT INTO USUARIOS (LOGIN, SENHA, NOME)
-      VALUES (?, ?)
+      VALUES (?, ?, 'Matheus')
     `;
 
     try {
