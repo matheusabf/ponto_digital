@@ -9,7 +9,7 @@ const port = 3001;
 const dbOptions = {
   host: 'localhost',
   port: 3050,
-  database: 'C:/Users/mathe/Documents/Facul/PontoDigital/Banco/TestePontoDigital.FDB',
+  database: 'C:/Banco/TestePontoDigital.FDB',
   user: 'SYSDBA',
   password: 'masterkey',
 };
@@ -38,7 +38,7 @@ const executeQuery = (query, params, callback) => {
 };
 
 // Endpoint /query para executar qualquer consulta
-app.post('/query', (req, res) => {
+app.post('http://localhost:3001/query', (req, res) => {
   const { query, params } = req.body;
 
   if (!query) {
