@@ -31,11 +31,63 @@
     overflow-x: auto; /* Adiciona uma barra de rolagem horizontal se necessário */
 }
 
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  
+  .popup h2 {
+    margin-top: 0;
+    color: #102144; /* Cor do título */
+  }
+  
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    resize: none;
+  }
+  
+  .justificar-btn {
+    background-color: #102144;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .justificar-btn:hover {
+    background-color: #0e1a2c; /* Tom mais escuro para hover */
+  }
+  
 /* Estilo para o container do select */
 .select-container {
     margin: 1rem 0;
 }
-
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
 /* Estilo para o elemento select */
 select {
     background-color: #102144; /* Cor de fundo */

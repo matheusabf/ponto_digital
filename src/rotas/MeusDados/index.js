@@ -79,6 +79,7 @@ const MeusDados = () => {
 
       if (response.data.success) {
         alert('Dados atualizados com sucesso');
+        localStorage.setItem('NOME', userData.nome)
         setIsEditing(false);
       } else {
         setError(response.data.message || 'Falha ao atualizar dados');
@@ -101,9 +102,9 @@ const MeusDados = () => {
             type="text"
             id="login"
             name="login"
-            value={userData.login}
+            value={userData.LOGIN}
             onChange={handleChange}
-            disabled={!isEditing}
+            readOnly
             className="input"
           />
         </div>
@@ -113,9 +114,9 @@ const MeusDados = () => {
             type="text"
             id="nome"
             name="nome"
-            value={userData.nome}
+            value={userData.NOME}
             onChange={handleChange}
-            disabled={!isEditing}
+            readOnly
             className="input"
           />
         </div>
@@ -125,7 +126,7 @@ const MeusDados = () => {
             type="password"
             id="senha"
             name="senha"
-            value={userData.senha}
+            value={userData.SENHA}
             onChange={handleChange}
             disabled={!isEditing}
             className="input"
@@ -138,7 +139,7 @@ const MeusDados = () => {
               <button type="button" onClick={() => setIsEditing(false)} className="button">Cancelar</button>
             </>
           ) : (
-            <button type="button" onClick={() => setIsEditing(true)} className="button">Editar</button>
+            <span onClick={() => setIsEditing(true)} className="button">Editar</span>
           )}
         </div>
       </form>

@@ -62,6 +62,10 @@ const Relatorio = () => {
   const [ano, setAno] = useState(new Date().getFullYear());
   const [mes, setMes] = useState(new Date().getMonth());
   const [cargaHoraria, setCargaHoraria] = useState(0);
+  const [inputJustificativa, setInputJustificativa] = useState('');
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [selectedDia, setSelectedDia] = useState(null);
+  const [justificativaExistente, setJustificativaExistente] = useState('');
   const userId = localStorage.getItem('ID_USUARIO');
 
   useEffect(() => {
@@ -71,7 +75,7 @@ const Relatorio = () => {
         const ultimoDia = new Date(ano, mes + 1, 0).toISOString().split('T')[0];
 
         const query = `
-          SELECT DATA, P1, P2, P3, P4, CARGA_HORARIA
+          SELECT DATA, P1, P2, P3, P4, CARGA_HORARIA, JUSTIFICATIVA
           FROM TABELA_PONTOS
           WHERE ID_USUARIO = ? AND DATA BETWEEN ? AND ?
           ORDER BY DATA
@@ -98,12 +102,59 @@ const Relatorio = () => {
   const handleChangeAno = (event) => {
     setAno(parseInt(event.target.value));
   };
-  function converterData(data) {
+
+  const converterData = (data) => {
     const partes = data.split('/');
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
-}
+  };
+
   const handleChangeMes = (event) => {
     setMes(parseInt(event.target.value));
+  };
+
+  const abrirPopup = (dia, justificativa) => {
+    setSelectedDia(dia);
+    setJustificativaExistente(justificativa);
+    setPopupVisible(true);
+  };
+
+  const adicionarJustificativa = async () => {
+    if (selectedDia && inputJustificativa) {
+      try {
+        const query = `
+          UPDATE TABELA_PONTOS 
+          SET JUSTIFICATIVA = ? 
+          WHERE ID_USUARIO = ? AND DATA = ?
+        `;
+        await axios.post('http://localhost:3001/query', {
+          query: query,
+          params: [inputJustificativa, userId, selectedDia]
+        });
+        setInputJustificativa('');
+        setPopupVisible(false);
+        alert('Justificativa adicionada com sucesso!');
+        // Recarregar os dados após adicionar a justificativa
+        const fetchData = async () => {
+          const primeiroDia = new Date(ano, mes, 1).toISOString().split('T')[0];
+          const ultimoDia = new Date(ano, mes + 1, 0).toISOString().split('T')[0];
+          const query = `
+            SELECT DATA, P1, P2, P3, P4, CARGA_HORARIA, JUSTIFICATIVA
+            FROM TABELA_PONTOS
+            WHERE ID_USUARIO = ? AND DATA BETWEEN ? AND ?
+            ORDER BY DATA
+          `;
+          const response = await axios.post('http://localhost:3001/query', {
+            query: query,
+            params: [userId, primeiroDia, ultimoDia]
+          });
+          setDados(response.data.data);
+        };
+        fetchData();
+      } catch (err) {
+        console.error('Erro ao adicionar justificativa:', err);
+        alert('Erro ao adicionar justificativa. Tente novamente.');
+      }
+    }
   };
 
   return (
@@ -140,13 +191,13 @@ const Relatorio = () => {
                 <th>Carga Horária</th>
                 <th>Horas Devendo</th>
                 <th>Horas Extras</th>
+                <th>Observação</th>
               </tr>
             </thead>
             <tbody>
               {diasDoMes.map((dia) => {
                 const registro = dados.find(reg => reg.DATA.split('T')[0] === dia);
                 const diaFormatado = dia.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$3/$2/$1');
-                console.log(dia,diaFormatado);
                 const diaSemana = new Date(converterData(dia)).toLocaleDateString('pt-BR', { weekday: 'long' });
 
                 const CARGA_HORARIA = registro ? isoParaTempo(registro.CARGA_HORARIA) : '';
@@ -158,7 +209,7 @@ const Relatorio = () => {
                   : 0;
                 const saldoHoras = registro ? calcularSaldoHoras(cargaHorariaHoras, parseFloat(totalTrabalhado)) : '0.00';
                 const horasExtras = registro ? calcularHorasExtras(parseFloat(saldoHoras)) : '0.00';
-                const saldo = saldoHoras > 0 ? saldoHoras : '0.00';
+                const justificativa = registro ? registro.JUSTIFICATIVA : '';
 
                 return (
                   <tr key={dia}>
@@ -170,8 +221,15 @@ const Relatorio = () => {
                     <td>{registro ? isoParaTempo(registro.P4) : ''}</td>
                     <td>{totalTrabalhado}</td>
                     <td>{CARGA_HORARIA}</td>
-                    <td>{saldo}</td>
+                    <td>{saldoHoras}</td>
                     <td>{horasExtras}</td>
+                    <td>
+                      {justificativa ? (
+                        <button onClick={() => abrirPopup(dia, justificativa)}>Ver Justificativa</button>
+                      ) : (
+                        <button onClick={() => abrirPopup(dia, '')}>Justificar</button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -179,6 +237,25 @@ const Relatorio = () => {
           </table>
         </div>
       </div>
+
+      {popupVisible && (
+        <div className="popup">
+          <h2>{justificativaExistente ? 'Justificativa' : 'Adicionar Justificativa'}</h2>
+          {justificativaExistente ? (
+            <p>{justificativaExistente}</p>
+          ) : (
+            <>
+              <textarea 
+                value={inputJustificativa} 
+                onChange={(e) => setInputJustificativa(e.target.value)} 
+                placeholder="Digite sua justificativa aqui..."
+              />
+              <button onClick={adicionarJustificativa}>Salvar</button>
+            </>
+          )}
+          <button onClick={() => setPopupVisible(false)}>Fechar</button>
+        </div>
+      )}
     </div>
   );
 };

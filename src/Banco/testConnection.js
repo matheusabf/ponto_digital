@@ -2,11 +2,10 @@ const Firebird = require('node-firebird');
 
 // Configurações de conexão com o Firebird
 const dbOptions = {
-  host: 'localhost',
-  port: 3050, // Certifique-se de que a porta está correta
-  database: 'C:/Users/mathe/Documents/Facul/PontoDigital/Banco/TestePontoDigital.FDB', // Verifique o caminho
-  user: 'SYSDBA',
-  password: 'masterkey'
+  connectionString: 'postgres://default:PASbzC6cMIY2@ep-polished-term-a4w7trp9.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require',
+  ssl: {
+    rejectUnauthorized: false, // Use isso apenas se necessário; para evitar erros SSL
+  },
 };
 
 // Função para testar a conexão

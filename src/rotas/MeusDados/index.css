@@ -1,73 +1,119 @@
+/* Estilo para o container de Meus Dados */
+.meus-dados-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #ffffff; /* Cor de fundo branca para maior contraste */
+  border: 1px solid #ddd; /* Borda suave ao redor do container */
+  border-radius: 12px; /* Bordas mais arredondadas */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
+  width: 100%;
+  max-width: 500px; /* Largura máxima do container */
+  margin: 10% auto; /* Centraliza o container horizontalmente */
+  text-align: center; /* Centraliza o texto */
+  animation: fadeIn 1s ease-in-out; /* Animação de fade-in ao carregar */
+}
 
-  
-  .meus-dados-container {
-    display: flex;
-    margin: 100px auto;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff; /* Fundo branco para o container */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 600px; /* Ajuste o tamanho conforme necessário */
+/* Animação de fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  .dados-form{
-    width:80%;
-    justify-content: center;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .titulo {
-    text-align: center;
-    color: #102144; /* Cor do texto do título */
+/* Estilo para o título do formulário */
+.titulo {
+  color: #102144; /* Azul escuro */
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  animation: slideIn 0.5s ease-out; /* Animação de slide-in */
+}
+
+/* Animação de slide-in */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
   }
-  
-  .input-container {
-    justify-content: inherit;
-    margin: 10px 0;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
-  
-  .label {
-    display: block;
-    margin-bottom: 5px;
-    color: #102144; /* Cor das labels */
-  }
-  
-  .input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #102144; /* Bordas em azul */
-    border-radius: 4px;
-    justify-content: center;
-    background-color: rgba(16, 33, 68, 0.1); /* Fundo sutil */
-    color: #102144; /* Texto em azul */
-  }
-  
-  .input:disabled {
-    width:400px;
-    background-color: rgba(16, 33, 68, 0.2); /* Fundo sutil quando desabilitado */
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    width: 100%; /* Para ocupar a largura total */
-  }
-  
-  .button {
-    text-align: center;
-    width: 120%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #102144; /* Botões em azul */
-    color: #fff; /* Texto dos botões em branco */
-    cursor: pointer;
-  }
-  
-  .button:hover {
-    background-color: #0d1a2d; /* Tom de azul mais escuro ao passar o mouse */
-  }
-  
+}
+
+/* Estilo para o formulário de dados */
+.dados-form {
+  width: 80%;
+  justify-content: center;
+}
+
+/* Estilo para os containers de input */
+.input-container {
+  margin: 10px 0;
+  width: 100%; /* Para ocupar a largura total */
+}
+
+/* Estilo para as labels */
+.label {
+  display: block;
+  margin-bottom: 5px;
+  color: #102144; /* Cor das labels */
+}
+
+/* Estilo para os inputs */
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #102144; /* Bordas em azul */
+  border-radius: 8px;
+  background-color: rgba(16, 33, 68, 0.1); /* Fundo sutil */
+  color: #102144; /* Texto em azul */
+}
+
+/* Estilo para os inputs desabilitados */
+.input:disabled {
+  background-color: rgba(16, 33, 68, 0.2); /* Fundo sutil quando desabilitado */
+}
+
+/* Estilo para o container de botões */
+.button-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100%; /* Para ocupar a largura total */
+}
+
+/* Estilo para os botões */
+.button {
+  text-align: center;
+  width: 100%; /* Ajuste a largura */
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #6797ff; /* Azul pastel claro */
+  color: #ffffff; /* Branco */
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave */
+}
+
+/* Estilo para o botão ao passar o mouse */
+.button:hover {
+  background-color: #355286; /* Azul pastel médio */
+  transform: scale(1.02); /* Leve aumento ao passar o mouse */
+}
+
+/* Estilo para mensagens de erro */
+.error {
+  color: #d32f2f; /* Vermelho para mensagens de erro */
+  font-size: 14px;
+  margin-top: 10px;
+}
