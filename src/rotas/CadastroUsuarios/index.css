@@ -1,0 +1,94 @@
+/* Modal */
+.modal {
+    position: fixed; /* Fixa o modal na tela */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centraliza o conteúdo */
+    z-index: 1000; /* Garante que o modal ficará sobre os outros elementos */
+    opacity: 0; /* Começa invisível */
+    animation: fadeIn 0.3s forwards; /* Animação de fade-in */
+  }
+  
+  /* Animação para fade-in */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 400px; /* Ajuste conforme necessário */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); /* Sombra mais suave e ampla */
+    transform: translateY(-30px); /* Começa um pouco acima */
+    animation: slideIn 0.5s ease-out; /* Animação de deslizamento */
+  }
+  
+  /* Animação de deslizamento do modal */
+  @keyframes slideIn {
+    from {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Botões do modal */
+  .modal-content button {
+    background-color: #102144; /* Cor de fundo do botão */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  /* Efeito hover nos botões */
+  .modal-content button:hover {
+    background-color: #08101f; /* Cor do botão ao passar o mouse */
+  }
+  
+  /* Estilo do formulário */
+  .modal-content form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilo dos campos de entrada */
+  .modal-content input {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Efeito nos campos de entrada ao focar */
+  .modal-content input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  /* Impede o scroll na página quando o modal está aberto */
+  body.modal-open {
+    overflow: hidden;
+  }
+  

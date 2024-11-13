@@ -1,98 +1,139 @@
-/* Estilo básico para o container do relatório */
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    width:500px;
+}
+
+.popup h2 {
+    margin-top: 0;
+}
 .relatorio {
     padding: 10px 50px;
     margin: 0 auto; /* Ajuste a margem para centralizar o container horizontalmente */
-    max-width: 1200px; /* Limite máximo da largura do container */
+    max-width: 1500px; /* Limite máximo da largura do container */
     box-sizing: border-box; /* Inclui padding e border na largura total */
+    opacity: 0; /* Inicialmente invisível */
+    transform: translateY(20px); /* Começa ligeiramente abaixo */
+    animation: fadeInUp 0.6s ease-out forwards; /* Aplica a animação de fade e deslizamento */
+    color: var(--fonte-secundaria);
 }
 
+/* Define a animação fadeInUp */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0; /* Inicialmente invisível */
+        transform: translateY(20px); /* Começa ligeiramente abaixo */
+    }
+    100% {
+        opacity: 1; /* Fica completamente visível */
+        transform: translateY(0); /* Move para a posição original */
+    }
+}
+
+/* Restante do seu código (sem alterações) */
 .hudrelatorio {
     width: 100%;
     text-align: center;
     justify-content: space-evenly;
     align-items: center;
     display: flex;
+    color: var(--fonte-secundaria);
 }
 
 .selectrelatorio {
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 400px;
+    align-items:center;
+}
+
+.selectrelatorio label{
+    margin: 0px 15px;
 }
 
 /* Estilo para o container da tabela */
 .table-container {
-    max-height: 550px; /* Ajuste a altura conforme necessário */
+    max-height: 600px; /* Ajuste a altura conforme necessário */
     overflow-y: auto; /* Adiciona uma barra de rolagem vertical */
-    border: 1px solid #ddd; /* Borda ao redor da tabela */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borda suave e transparente */
     border-radius: 8px; /* Bordas arredondadas */
     width: 100%; /* Largura do container */
     overflow-x: auto; /* Adiciona uma barra de rolagem horizontal se necessário */
+    background: var(--cor-secundaria) /* Fundo escuro e transparente */
+}
+.table-container table{
+    max-height: 600px; /* Ajuste a altura conforme necessário */
+    overflow-y: auto; /* Adiciona uma barra de rolagem vertical */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borda suave e transparente */
+    border-radius: 8px; /* Bordas arredondadas */
+    width: 100%; /* Largura do container */
+    overflow-x: auto; /* Adiciona uma barra de rolagem horizontal se necessário */
+    background: var(--cor-primaria);
 }
 
-
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  
-  .popup h2 {
-    margin-top: 0;
-    color: #102144; /* Cor do título */
-  }
-  
-  textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    resize: none;
-  }
-  
-  .justificar-btn {
-    background-color: #102144;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .justificar-btn:hover {
-    background-color: #0e1a2c; /* Tom mais escuro para hover */
-  }
-  
-/* Estilo para o container do select */
-.select-container {
-    margin: 1rem 0;
+/* Estilo para o cabeçalho da tabela */
+thead {
+    background-color: var(--cor-secundaria); /* Fundo escuro com alta opacidade para cabeçalho */
+    color: var(--fonte-primaria); /* Cor do texto do cabeçalho */
+    position: sticky; /* Faz o cabeçalho fixo */
+    top: 0; /* Posiciona o cabeçalho no topo do container */
+    z-index: 1; /* Garante que o cabeçalho esteja acima do conteúdo da tabela */
 }
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-  
-/* Estilo para o elemento select */
-select {
-    background-color: #102144; /* Cor de fundo */
+
+/* Estilo para as células do cabeçalho */
+th {
+    padding: 12px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Linha inferior suave e transparente */
+    text-align: left;
+}
+
+/* Estilo para o corpo da tabela */
+tbody tr:nth-child(even) {
+    background-color: var(--cor-secundaria-opa-02); /* Fundo escuro com alta opacidade para linhas pares */
+}
+
+tbody tr:nth-child(odd) {
+    background-color: var(--cor-secundaria-opa-01); /* Fundo escuro com opacidade um pouco mais baixa para linhas ímpares */
+}
+
+/* Estilo para as células da tabela */
+td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Linha inferior suave para as células */
+    background-color: rgba(16, 33, 68, 0.3); /* Fundo escuro e opaco para as células */
+    color: #ffffff; /* Cor do texto nas células */
+}
+
+/* Estilo para a linha ao passar o mouse */
+tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Cor de fundo ao passar o mouse (transparente) */
+    color: #333; /* Cor do texto ao passar o mouse */
+}
+
+/* Estilo para o botão do relatório */
+.relatorio button {
+    background: var(--cor-gradiente);
     color: #ffffff; /* Cor do texto */
-    border: 1px solid #102144; /* Cor da borda */
+    border-radius: 15px; /* Bordas arredondadas */
+    padding: 0.5rem 1rem; /* Espaçamento interno */
+    font-size: 1rem; /* Tamanho da fonte */
+    cursor: pointer; /* Cursor ao passar sobre o botão */
+    outline: none; /* Remove a borda padrão ao focar */
+    transition: background-color 0.3s, border-color 0.3s; /* Transição suave para a cor de fundo e borda */
+}
+
+.relatorio button:hover {
+    background: var(--cor-gradiente-opacity);
+}
+
+/* Estilo para o select (dropdown) */
+select {
+    background:var(--cor-gradiente); /* Fundo escuro e transparente */
+    color: #ffffff; /* Cor do texto */
     border-radius: 4px; /* Bordas arredondadas */
     padding: 0.5rem 1rem; /* Espaçamento interno */
     font-size: 1rem; /* Tamanho da fonte */
@@ -104,14 +145,12 @@ select {
 
 /* Estilo para o select ao passar o mouse sobre ele */
 select:hover {
-    background-color: #0f1a3a; /* Cor de fundo ao passar o mouse */
-    border-color: #0f1a3a; /* Cor da borda ao passar o mouse */
+    background: linear-gradient(315deg, rgba(16, 33, 68, 0.8) 0%, rgba(16, 33, 68, 0.6) 50%, rgba(16, 33, 68, 0.4) 100%);
 }
 
 /* Estilo para o select ao ser focado */
 select:focus {
-    background-color: #0e1a3a; /* Cor de fundo ao focar */
-    border-color: #0e1a3a; /* Cor da borda ao focar */
+    background: linear-gradient(315deg, rgba(16, 33, 68, 0.8) 0%, rgba(16, 33, 68, 0.6) 50%, rgba(16, 33, 68, 0.4) 100%);
 }
 
 /* Estilo para as opções do select */
@@ -125,49 +164,47 @@ label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: #102144; /* Cor do texto do label */
 }
 
-/* Estilo para a tabela */
-table {
-    width: 100%;
-    border-collapse: collapse; /* Remove espaçamento entre células */
-    font-family: Arial, sans-serif; /* Fonte para a tabela */
+/* Personalização do scroll (barra de rolagem) */
+
+/* Personaliza o scroll para o container da tabela */
+.table-container {
+    max-height: 600px; /* Ajuste a altura conforme necessário */
+    overflow-y: auto; /* Adiciona uma barra de rolagem vertical */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borda suave e transparente */
+    border-radius: 8px; /* Bordas arredondadas */
+    width: 100%; /* Largura do container */
+    overflow-x: auto; /* Adiciona uma barra de rolagem horizontal se necessário */
+    background: linear-gradient(315deg, rgba(16, 33, 68, 0.247) 0%, rgba(16, 33, 68, 0.288) 50%, rgba(16, 33, 68, 0.192) 100%); /* Fundo escuro e transparente */
 }
 
-/* Estilo para o cabeçalho da tabela */
-thead {
-    background-color: #f4f4f4; /* Cor de fundo clara para o cabeçalho */
-    color: #333; /* Cor do texto escura para contraste */
-    position: sticky; /* Faz o cabeçalho fixo */
-    top: 0; /* Posiciona o cabeçalho no topo do container */
-    z-index: 1; /* Garante que o cabeçalho esteja acima do conteúdo da tabela */
+/* Personalização do scroll para o Chrome, Safari e Edge */
+.table-container::-webkit-scrollbar {
+    width: 12px; /* Largura da barra de rolagem vertical */
+    height: 12px; /* Altura da barra de rolagem horizontal */
 }
 
-/* Estilo para as células do cabeçalho */
-th {
-    padding: 12px;
-    border-bottom: 2px solid #ddd; /* Linha inferior para o cabeçalho */
-    text-align: left;
-    background-color: #e0e0e0; /* Cor de fundo suave para o cabeçalho */
+/* Estilo da "track" (trilha) da barra de rolagem */
+.table-container::-webkit-scrollbar-track {
+    background: rgba(16, 33, 68, 0.4); /* Cor de fundo da trilha (área por onde o scroll passa) */
+    border-radius: 8px; /* Borda arredondada */
 }
 
-/* Estilo para o corpo da tabela */
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9; /* Cor de fundo clara para linhas pares */
+/* Estilo do "thumb" (parte que se move da barra de rolagem) */
+.table-container::-webkit-scrollbar-thumb {
+    background-color: rgba(16, 33, 68, 0.8); /* Cor do thumb */
+    border-radius: 8px; /* Borda arredondada */
+    border: 3px solid rgba(16, 33, 68, 0.4); /* Cria uma borda transparente ao redor do thumb */
 }
 
-tbody tr:nth-child(odd) {
-    background-color: #ffffff; /* Cor de fundo branca para linhas ímpares */
+/* Estilo do thumb ao passar o mouse sobre ele */
+.table-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(16, 33, 68, 1); /* Cor mais escura ao passar o mouse */
 }
 
-td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd; /* Linha inferior suave para as células */
-}
-
-/* Estilo para a linha ao passar o mouse */
-tbody tr:hover {
-    background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
-    color: #333; /* Cor do texto ao passar o mouse */
+/* Personalização do scroll para o Firefox */
+.table-container {
+    scrollbar-width: thin; /* Define a largura do scroll (opções: auto, thin, none) */
+    scrollbar-color: rgba(16, 33, 68, 0.8) rgba(16, 33, 68, 0.4); /* Define a cor do thumb e da trilha */
 }

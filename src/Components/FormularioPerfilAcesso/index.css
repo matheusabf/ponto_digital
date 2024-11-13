@@ -1,0 +1,107 @@
+/* index.css ou FormularioPerfilAcesso.css */
+
+/* Container principal do formulário */
+.formulario {
+    background: var(--cor-formulario);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column; /* Organiza os filhos em uma coluna */
+    gap: 20px; /* Espaçamento entre os elementos do formulário */
+}
+  
+/* Estilo para os labels */
+.formulario label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 6px;
+    display: block;
+    margin-top: 12px;
+}
+  
+/* Container de cada linha do formulário, utilizando display flex */
+.formulario div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+  
+/* Estilo para os inputs de checkbox */
+.formulario input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.6); /* Aumenta significativamente o tamanho do checkbox */
+    accent-color: #4CAF50; /* Cor personalizada para o checkbox */
+    margin-top: 4px; /* Garante o alinhamento visual */
+}
+
+/* Botões de ação (Salvar e Cancelar) */
+.formulario button {
+    background-color: #1d2d6d; /* Azul escuro */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+/* Estilo para o botão de salvar */
+.formulario button[type="submit"] {
+    background-color: #b6c5ff; /* Azul escuro */
+}
+
+/* Estilo para o botão de cancelar */
+.formulario button[type="button"] {
+    background-color: #e74c3c; /* Vermelho */
+}
+
+/* Hover nos botões */
+.formulario button:hover {
+    background-color: #0f1a40; /* Azul mais escuro */
+}
+
+/* Estilo para o botão de cancelar */
+.formulario button[type="button"]:hover {
+    background-color: #c0392b; /* Vermelho mais escuro */
+}
+
+/* Estilo para os campos de entrada */
+.formulario input[type="text"],
+.formulario input[type="checkbox"],
+.formulario input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333; /* Alterando a cor para garantir visibilidade */
+    margin-top: 6px; /* Garante um pequeno espaço entre o label e o input */
+}
+
+/* Tornar o formulário responsivo */
+@media (max-width: 600px) {
+    .formulario {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .formulario label {
+        font-size: 12px;
+    }
+
+    .formulario button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}

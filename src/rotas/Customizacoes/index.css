@@ -1,0 +1,26 @@
+.theme-btn {
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;  /* Tornando os botões arredondados */
+  }
+  
+  .cinza {
+    background-color: gray;
+  }
+  
+  .verde {
+    background-color: green;
+  }
+  
+  .roxo {
+    background-color: purple;
+  }
+  
+  .azul {
+    background-color: blue;
+  }
+  

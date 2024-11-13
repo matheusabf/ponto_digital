@@ -7,7 +7,6 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate(); // Use navigate hook for redirection
 
   const handleLogin = async (e) => {
@@ -26,50 +25,45 @@ const Login = () => {
       });
 
       if (response.data.success) {
+        const user = response.data.data[0];
         localStorage.setItem('login', 'true'); // Use a real token in production
-        const ID = response.data.data[0].ID;
-        const username = response.data.data[0].NOME;
-        localStorage.setItem('ID_USUARIO', ID);
-        localStorage.setItem('NOME', username);
-        alert('Login successful');
+        localStorage.setItem('ID_USUARIO', user.ID);
+        localStorage.setItem('NOME', user.NOME);
+        
+        // Verificar se o usuário tem permissão para cadastrar usuários
+        const permissionQuery = `
+          SELECT *
+          FROM PERFIL_ACESSO
+          WHERE ID = (SELECT PERFIL_ACESSO FROM USUARIOS WHERE ID = ?)
+        `;
+        const permissionResponse = await axios.post('http://localhost:3001/query', {
+          query: permissionQuery,
+          params: [user.ID]
+        });
+        if (permissionResponse.data.success) {
+          const canCreateUser = permissionResponse.data.data[0];
+          localStorage.setItem('PERMISSOES', JSON.stringify(canCreateUser));
+        } else {
+          localStorage.setItem('PERFIL_ACESSO_CADASTRA_USUARIO', 'false');
+        }
+
+        alert('Login realizado');
         navigate('/registrar-ponto'); // Redirect to home page
       } else {
-        setError(response.data.message || 'Invalid username or password');
+        setError(response.data.message || 'Nome ou senha inválido');
       }
     } catch (err) {
-      setError('Error occurred while logging in');
-    }
-  };
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-
-    const query = `
-      INSERT INTO USUARIOS (LOGIN, SENHA, NOME)
-      VALUES (?, ?, 'Matheus')
-    `;
-
-    try {
-      const response = await axios.post('http://localhost:3001/query', {
-        query,
-        params: [username, password]
-      });
-
-      if (response.data.success) {
-        alert('Registration successful');
-        setIsRegistering(false); // Switch back to login form
-      } else {
-        setError(response.data.message || 'Failed to register');
-      }
-    } catch (err) {
-      setError('Error occurred while registering');
+      setError('Erro ao realizar login');
     }
   };
 
   return (
     <div className="login-container">
-      <h2>{isRegistering ? 'Por favor, crie sua conta' : 'Bem vindo(a), faça login:'}</h2>
-      <form onSubmit={isRegistering ? handleRegister : handleLogin}>
+      {/* Logo no topo */}
+      <img src="/logo.png" alt="Logo" className="login-logo" />
+
+      <h2>Bem-vindo(a), faça login:</h2>
+      <form onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Login"
@@ -84,16 +78,15 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">{isRegistering ? 'Registrar' : 'Acessar'}</button>
+        <button type="submit">Acessar</button>
       </form>
+      
+      {/* Exibe a mensagem de erro, se houver */}
       {error && <p className="error">{error}</p>}
-      <span
-        type="button"
-        className="btn-switch"
-        onClick={() => setIsRegistering(!isRegistering)}
-      >
-        {isRegistering ? 'Já tem uma conta? Faça login' : 'Não tem uma conta? Registre-se'}
-      </span>
+
+      {/* Copyright abaixo do botão */}
+      <p className="copyright">© 2024 Ponto Digital. Todos os direitos reservados.</p>
+
       <div className="wave wave1"></div>
       <div className="wave wave2"></div>
       <div className="wave wave3"></div>

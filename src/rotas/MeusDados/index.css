@@ -1,22 +1,23 @@
-/* Estilo para o container de Meus Dados */
+/* Estilo geral para o container de Meus Dados */
 .meus-dados-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #fff;
   padding: 20px;
-  background-color: #ffffff; /* Cor de fundo branca para maior contraste */
+  background: var(--cor-gradiente);
   border: 1px solid #ddd; /* Borda suave ao redor do container */
-  border-radius: 12px; /* Bordas mais arredondadas */
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   width: 100%;
-  max-width: 500px; /* Largura mÃ¡xima do container */
-  margin: 10% auto; /* Centraliza o container horizontalmente */
-  text-align: center; /* Centraliza o texto */
-  animation: fadeIn 1s ease-in-out; /* AnimaÃ§Ã£o de fade-in ao carregar */
+  max-width: 600px;
+  margin: 5% auto;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out; /* Animação de fade-in ao carregar */
 }
 
-/* AnimaÃ§Ã£o de fade-in */
+/* Animação de fade-in */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -28,16 +29,15 @@
   }
 }
 
-/* Estilo para o tÃ­tulo do formulÃ¡rio */
-.titulo {
-  color: #102144; /* Azul escuro */
+/* Estilo para o título */
+.meus-dados-container h1 {
   margin-bottom: 20px;
   font-size: 24px;
   font-weight: 700;
-  animation: slideIn 0.5s ease-out; /* AnimaÃ§Ã£o de slide-in */
+  animation: slideIn 0.5s ease-out; /* Animação de slide-in */
 }
 
-/* AnimaÃ§Ã£o de slide-in */
+/* Animação de slide-in */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -49,71 +49,152 @@
   }
 }
 
-/* Estilo para o formulÃ¡rio de dados */
+/* Estilo para o formulário de dados */
 .dados-form {
-  width: 80%;
-  justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Alinha os campos em coluna */
+  gap: 20px; /* Espaçamento entre os campos */
+  text-align: left;
+  margin-top: 20px;
 }
 
 /* Estilo para os containers de input */
 .input-container {
-  margin: 10px 0;
-  width: 100%; /* Para ocupar a largura total */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 /* Estilo para as labels */
-.label {
-  display: block;
+.input-container label {
+  font-size: 16px;
+  color: #fff;
   margin-bottom: 5px;
-  color: #102144; /* Cor das labels */
 }
 
 /* Estilo para os inputs */
 .input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #102144; /* Bordas em azul */
+  border: 1px solid #102144;
   border-radius: 8px;
-  background-color: rgba(16, 33, 68, 0.1); /* Fundo sutil */
-  color: #102144; /* Texto em azul */
+  background-color: rgba(16, 33, 68, 0.2);
+  color: #fff;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
 }
 
 /* Estilo para os inputs desabilitados */
 .input:disabled {
-  background-color: rgba(16, 33, 68, 0.2); /* Fundo sutil quando desabilitado */
+  background-color: rgba(16, 33, 68, 0.4);
 }
 
-/* Estilo para o container de botÃµes */
+/* Estilo para o campo de senha */
+.senha-container {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Estilo para o container de botões */
 .button-container {
   display: flex;
   justify-content: center;
   text-align: center;
-  width: 100%; /* Para ocupar a largura total */
+  width: 100%;
+  gap: 15px; /* Espaçamento entre os botões */
+  margin-top: 20px; /* Espaço acima dos botões */
 }
 
-/* Estilo para os botÃµes */
+/* Estilo para os botões */
 .button {
-  text-align: center;
-  width: 100%; /* Ajuste a largura */
+  width: 120px;
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background-color: #6797ff; /* Azul pastel claro */
-  color: #ffffff; /* Branco */
+  background-color: #ffffff3d;
+  color: #ffffff;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease; /* TransiÃ§Ã£o suave */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  animation: pulse 1.5s infinite; /* Animação de pulso */
 }
 
-/* Estilo para o botÃ£o ao passar o mouse */
+/* Animação de pulso */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Estilo para os botões ao passar o mouse */
 .button:hover {
-  background-color: #355286; /* Azul pastel mÃ©dio */
+  background-color: #355286; /* Azul pastel médio */
   transform: scale(1.02); /* Leve aumento ao passar o mouse */
+}
+
+/* Estilo para o botão de "Editar" */
+.button:active {
+  transform: scale(1);
+}
+
+/* Estilo para a exibição do texto "não edita" */
+.naoedita {
+  font-size: 16px;
+  color: #ddd;
+  padding: 10px;
+  background-color: rgba(16, 33, 68, 0.2);
+  border-radius: 8px;
 }
 
 /* Estilo para mensagens de erro */
 .error {
-  color: #d32f2f; /* Vermelho para mensagens de erro */
+  color: #d32f2f;
   font-size: 14px;
   margin-top: 10px;
+  animation: shake 0.5s ease-in-out; /* Animação de shake */
+}
+
+/* Animação de shake */
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Estilo para campos com foco */
+.input:focus {
+  border-color: #6797ff;
+  background-color: rgba(16, 33, 68, 0.4);
+}
+
+/* Estilo para o container de senha com ícone */
+.senha-container input {
+  width: calc(100% - 30px); /* Ajustando para não sobrepor o ícone */
 }

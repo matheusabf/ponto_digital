@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './index.css'; // Certifique-se de que o CSS esteja sendo importado
+import * as XLSX from 'xlsx'; // Importando o módulo XLSX
+import './index.css';
+import { usePerfilAcesso } from '../../Context/PerfilAcessoContexto';
 
-// Função para gerar todos os dias de um mês
 const gerarDiasDoMes = (ano, mes) => {
   const dias = [];
   const primeiroDia = new Date(ano, mes, 1);
@@ -15,7 +16,6 @@ const gerarDiasDoMes = (ano, mes) => {
   return dias;
 };
 
-// Função para converter uma string ISO 8601 em uma string de tempo no formato HH:mm:ss
 const isoParaTempo = (isoString) => {
   if (!isoString) return '';
   const date = new Date(isoString);
@@ -25,51 +25,53 @@ const isoParaTempo = (isoString) => {
   return `${horas}:${minutos}:${segundos}`;
 };
 
-// Função para converter TIME no formato HH:mm:ss em milissegundos desde a meia-noite
-const tempoParaMilissegundos = (tempo) => {
-  const [horas, minutos, segundos] = tempo.split(':').map(Number);
-  return (horas * 3600 + minutos * 60 + segundos) * 1000; // em milissegundos
-};
-
-// Função para calcular o total de horas a partir de uma lista de horários
-const calcula_total = (horarios) => {
-  const [p1, p2, p3, p4] = horarios.map(tempoParaMilissegundos);
-  const totalTrabalhadoMs = (p4 - p1 - (p3 - p2));
-  const totalTrabalhadoHoras = totalTrabalhadoMs / (1000 * 3600);
-  return totalTrabalhadoHoras;
-};
-
-// Função para calcular o total trabalhado
 const calcularTotalTrabalhado = (p1, p2, p3, p4) => {
-  const total = calcula_total([p1, p2, p3, p4]);
-  return total.toFixed(2);
-};
+  const tempo1 = new Date(`1970-01-01T${p1}Z`).getTime();  // Hora de entrada
+  const tempo2 = new Date(`1970-01-01T${p2}Z`).getTime();  // Hora de saída para o almoço
+  const tempo3 = new Date(`1970-01-01T${p3}Z`).getTime();  // Hora de volta do almoço
+  const tempo4 = new Date(`1970-01-01T${p4}Z`).getTime();  // Hora de saída
+  
+  // Calculando o total de milissegundos trabalhados
+  const totalMilissegundos = ((tempo4 - tempo1) - (tempo3 - tempo2));
 
-// Função para calcular o saldo de horas
-const calcularSaldoHoras = (cargaHoraria, totalTrabalhado) => {
-  return (cargaHoraria - totalTrabalhado).toFixed(2);
-};
+  // Convertendo para horas e minutos
+  const horas = Math.floor(totalMilissegundos / 3600000);  // 1 hora = 3600000 ms
+  const minutos = Math.floor((totalMilissegundos % 3600000) / 60000);  // 1 minuto = 60000 ms
 
-// Função para calcular horas extras
-const calcularHorasExtras = (saldoHoras) => {
-  return saldoHoras < 0 ? (-saldoHoras).toFixed(2) : '0.00';
+  // Retornando no formato HH:MM
+  return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}`;
 };
 
 const Relatorio = () => {
+  const perfilAcesso = usePerfilAcesso(); // Acessa o perfil de acesso do contexto
+  const exportaExcel = perfilAcesso?.EXPORTA_EXCEL === true; 
   const [dados, setDados] = useState([]);
-  const [error, setError] = useState('');
   const [diasDoMes, setDiasDoMes] = useState([]);
   const [ano, setAno] = useState(new Date().getFullYear());
   const [mes, setMes] = useState(new Date().getMonth());
-  const [cargaHoraria, setCargaHoraria] = useState(0);
-  const [inputJustificativa, setInputJustificativa] = useState('');
-  const [popupVisible, setPopupVisible] = useState(false);
-  const [selectedDia, setSelectedDia] = useState(null);
-  const [justificativaExistente, setJustificativaExistente] = useState('');
-  const userId = localStorage.getItem('ID_USUARIO');
+  const [usuarios, setUsuarios] = useState([]); // Armazena os usuários
+  const [selectedUserId, setSelectedUserId] = useState(localStorage.getItem('ID_USUARIO') || '');
+
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      try {
+        const response = await axios.post('http://localhost:3001/query', {
+          query: 'SELECT NOME, ID FROM USUARIOS',
+          params: []
+        });
+        setUsuarios(response.data.data);
+      } catch (err) {
+        console.error('Erro ao carregar usuários:', err);
+      }
+    };
+
+    fetchUsuarios();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!selectedUserId) return; // Se não houver ID selecionado, não faz a consulta
+
       try {
         const primeiroDia = new Date(ano, mes, 1).toISOString().split('T')[0];
         const ultimoDia = new Date(ano, mes + 1, 0).toISOString().split('T')[0];
@@ -82,111 +84,98 @@ const Relatorio = () => {
         `;
         const response = await axios.post('http://localhost:3001/query', {
           query: query,
-          params: [userId, primeiroDia, ultimoDia]
+          params: [selectedUserId, primeiroDia, ultimoDia]
         });
 
         setDados(response.data.data);
-        setCargaHoraria(response.data.data.length > 0 ? isoParaTempo(response.data.data[0].CARGA_HORARIA) : '');
-
-        // Gerar todos os dias do mês selecionado
         setDiasDoMes(gerarDiasDoMes(ano, mes));
       } catch (err) {
-        setError('Erro ao carregar dados');
-        console.error(err);
+        console.error('Erro ao carregar dados:', err);
       }
     };
 
     fetchData();
-  }, [ano, mes]);
+  }, [ano, mes, selectedUserId]);
 
-  const handleChangeAno = (event) => {
-    setAno(parseInt(event.target.value));
-  };
-
-  const converterData = (data) => {
-    const partes = data.split('/');
-    return `${partes[2]}-${partes[1]}-${partes[0]}`;
-  };
-
-  const handleChangeMes = (event) => {
-    setMes(parseInt(event.target.value));
-  };
-
-  const abrirPopup = (dia, justificativa) => {
-    setSelectedDia(dia);
-    setJustificativaExistente(justificativa);
-    setPopupVisible(true);
-  };
-
-  const adicionarJustificativa = async () => {
-    if (selectedDia && inputJustificativa) {
-      try {
-        const query = `
-          UPDATE TABELA_PONTOS 
-          SET JUSTIFICATIVA = ? 
-          WHERE ID_USUARIO = ? AND DATA = ?
-        `;
-        await axios.post('http://localhost:3001/query', {
-          query: query,
-          params: [inputJustificativa, userId, selectedDia]
-        });
-        setInputJustificativa('');
-        setPopupVisible(false);
-        alert('Justificativa adicionada com sucesso!');
-        // Recarregar os dados após adicionar a justificativa
-        const fetchData = async () => {
-          const primeiroDia = new Date(ano, mes, 1).toISOString().split('T')[0];
-          const ultimoDia = new Date(ano, mes + 1, 0).toISOString().split('T')[0];
-          const query = `
-            SELECT DATA, P1, P2, P3, P4, CARGA_HORARIA, JUSTIFICATIVA
-            FROM TABELA_PONTOS
-            WHERE ID_USUARIO = ? AND DATA BETWEEN ? AND ?
-            ORDER BY DATA
-          `;
-          const response = await axios.post('http://localhost:3001/query', {
-            query: query,
-            params: [userId, primeiroDia, ultimoDia]
-          });
-          setDados(response.data.data);
-        };
-        fetchData();
-      } catch (err) {
-        console.error('Erro ao adicionar justificativa:', err);
-        alert('Erro ao adicionar justificativa. Tente novamente.');
-      }
-    }
+  // Função para exportar os dados para Excel
+  const exportarParaExcel = () => {
+    const wsData = dados.map((registro) => {
+      const diaFormatado = registro.DATA.split('T')[0].replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$3/$2/$1');
+      const totalTrabalhado = calcularTotalTrabalhado(isoParaTempo(registro.P1), isoParaTempo(registro.P2), isoParaTempo(registro.P3), isoParaTempo(registro.P4));
+  
+      // Verifique se CARGA_HORARIA não é null ou undefined
+      const cargaHoraria = registro.CARGA_HORARIA ? isoParaTempo(registro.CARGA_HORARIA) : '00:00:00';
+      
+      return {
+        Dia: diaFormatado,
+        'Dia da Semana': new Date(registro.DATA).toLocaleDateString('pt-BR', { weekday: 'long' }),
+        P1: isoParaTempo(registro.P1),
+        P2: isoParaTempo(registro.P2),
+        P3: isoParaTempo(registro.P3),
+        P4: isoParaTempo(registro.P4),
+        'Total Trabalhado (Horas)': totalTrabalhado,
+        'Carga Horária': cargaHoraria,
+        'Horas Devendo': (parseFloat(cargaHoraria.split(':')[0]) - parseFloat(totalTrabalhado)),
+        'Horas Extras': (parseFloat(totalTrabalhado) - parseFloat(cargaHoraria.split(':')[0]) < 0 ? '0.00' : (parseFloat(totalTrabalhado) - parseFloat(cargaHoraria.split(':')[0]))),
+        Observacao: registro.JUSTIFICATIVA || '',
+      };
+    });
+  
+    const ws = XLSX.utils.json_to_sheet(wsData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Relatório de Ponto');
+    
+    // Gerar o arquivo Excel e fazer o download
+    XLSX.writeFile(wb, 'Relatorio_Ponto.xlsx');
   };
 
   return (
     <div>
-      <div className='hudrelatorio'>
+      <div className="hudrelatorio">
         <h1>Relatório de Ponto</h1>
-        <div className='selectrelatorio'>
-          <label htmlFor="ano">Ano:</label>
-          <select id="ano" value={ano} onChange={handleChangeAno}>
-            {[...Array(10).keys()].map(i => (
-              <option key={i} value={ano - 5 + i}>{ano - 5 + i}</option>
-            ))}
-          </select>
+        <div className="selectrelatorio">
           <label htmlFor="mes">Mês:</label>
-          <select id="mes" value={mes} onChange={handleChangeMes}>
+          <select id="mes" value={mes} onChange={(e) => setMes(parseInt(e.target.value))}>
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i} value={i}>{i + 1}</option>
             ))}
           </select>
+          <label htmlFor="ano">Ano:</label>
+          <select id="ano" value={ano} onChange={(e) => setAno(parseInt(e.target.value))}>
+            {[...Array(10).keys()].map(i => (
+              <option key={i} value={ano - 5 + i}>{ano - 5 + i}</option>
+            ))}
+          </select>
+          <label htmlFor="usuario">Colaborador:</label>
+          <select 
+            id="usuario" 
+            value={selectedUserId} 
+            onChange={(e) => setSelectedUserId(e.target.value)}
+          >
+            <option value="">Selecione</option>
+            {usuarios.map((usuario) => (
+              <option key={usuario.ID} value={usuario.ID}>
+                {usuario.NOME}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
+
       <div className="relatorio">
+        {exportaExcel && (
+          <button onClick={exportarParaExcel}>Exportar para Excel</button>
+        )}
         <div className="table-container">
           <table>
             <thead>
               <tr>
                 <th>Dia</th>
                 <th>Dia da Semana</th>
-                <th>P1</th>
-                <th>P2</th>
-                <th>P3</th>
-                <th>P4</th>
+                <th>Entrada</th>
+                <th>Ida Almoco</th>
+                <th>Volta Almoco</th>
+                <th>Saida</th>
                 <th>Total Trabalhado (Horas)</th>
                 <th>Carga Horária</th>
                 <th>Horas Devendo</th>
@@ -198,18 +187,9 @@ const Relatorio = () => {
               {diasDoMes.map((dia) => {
                 const registro = dados.find(reg => reg.DATA.split('T')[0] === dia);
                 const diaFormatado = dia.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$3/$2/$1');
-                const diaSemana = new Date(converterData(dia)).toLocaleDateString('pt-BR', { weekday: 'long' });
-
+                const diaSemana = new Date(dia).toLocaleDateString('pt-BR', { weekday: 'long' });
                 const CARGA_HORARIA = registro ? isoParaTempo(registro.CARGA_HORARIA) : '';
-                const totalTrabalhado = registro
-                  ? calcularTotalTrabalhado(isoParaTempo(registro.P1), isoParaTempo(registro.P2), isoParaTempo(registro.P3), isoParaTempo(registro.P4))
-                  : '0.00';
-                const cargaHorariaHoras = registro
-                  ? parseFloat(isoParaTempo(registro.CARGA_HORARIA).split(':')[0]) + parseFloat(isoParaTempo(registro.CARGA_HORARIA).split(':')[1])/60 + parseFloat(isoParaTempo(registro.CARGA_HORARIA).split(':')[2])/3600
-                  : 0;
-                const saldoHoras = registro ? calcularSaldoHoras(cargaHorariaHoras, parseFloat(totalTrabalhado)) : '0.00';
-                const horasExtras = registro ? calcularHorasExtras(parseFloat(saldoHoras)) : '0.00';
-                const justificativa = registro ? registro.JUSTIFICATIVA : '';
+                const totalTrabalhado = registro ? calcularTotalTrabalhado(isoParaTempo(registro.P1), isoParaTempo(registro.P2), isoParaTempo(registro.P3), isoParaTempo(registro.P4)) : '0.00';
 
                 return (
                   <tr key={dia}>
@@ -221,15 +201,9 @@ const Relatorio = () => {
                     <td>{registro ? isoParaTempo(registro.P4) : ''}</td>
                     <td>{totalTrabalhado}</td>
                     <td>{CARGA_HORARIA}</td>
-                    <td>{saldoHoras}</td>
-                    <td>{horasExtras}</td>
-                    <td>
-                      {justificativa ? (
-                        <button onClick={() => abrirPopup(dia, justificativa)}>Ver Justificativa</button>
-                      ) : (
-                        <button onClick={() => abrirPopup(dia, '')}>Justificar</button>
-                      )}
-                    </td>
+                    <td>{registro ? (parseFloat(CARGA_HORARIA.split(':')[0]) - parseFloat(totalTrabalhado)).toFixed(2) : ''}</td>
+                    <td>{registro ? (parseFloat(totalTrabalhado) - parseFloat(CARGA_HORARIA.split(':')[0]) < 0 ? '0.00' : (parseFloat(totalTrabalhado) - parseFloat(CARGA_HORARIA.split(':')[0])).toFixed(2)) : ''}</td>
+                    <td>{registro ? registro.JUSTIFICATIVA : ''}</td>
                   </tr>
                 );
               })}
@@ -237,25 +211,6 @@ const Relatorio = () => {
           </table>
         </div>
       </div>
-
-      {popupVisible && (
-        <div className="popup">
-          <h2>{justificativaExistente ? 'Justificativa' : 'Adicionar Justificativa'}</h2>
-          {justificativaExistente ? (
-            <p>{justificativaExistente}</p>
-          ) : (
-            <>
-              <textarea 
-                value={inputJustificativa} 
-                onChange={(e) => setInputJustificativa(e.target.value)} 
-                placeholder="Digite sua justificativa aqui..."
-              />
-              <button onClick={adicionarJustificativa}>Salvar</button>
-            </>
-          )}
-          <button onClick={() => setPopupVisible(false)}>Fechar</button>
-        </div>
-      )}
     </div>
   );
 };

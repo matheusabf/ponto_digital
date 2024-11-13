@@ -4,13 +4,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #fff;
   padding: 20px;
-  background-color: #ffffff; /* Cor de fundo branca para maior contraste */
+  background: var(--cor-gradiente); /* Cor de fundo branca para maior contraste */
   border: 1px solid #ddd; /* Borda suave ao redor do container */
   border-radius: 12px; /* Bordas mais arredondadas */
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
   width: 100%;
-  max-width: 500px; /* Largura máxima do container */
+  max-width: 800px; /* Largura máxima do container */
   margin: 10% auto; /* Centraliza o container horizontalmente */
   text-align: center; /* Centraliza o texto */
   animation: fadeIn 1s ease-in-out; /* Animação de fade-in ao carregar */
@@ -30,7 +31,6 @@
 
 /* Estilo para o título do formulário */
 .registrar-container h1 {
-  color: #102144; /* Azul escuro */
   margin-bottom: 20px;
   font-size: 24px;
   font-weight: 700;
@@ -51,8 +51,7 @@
 
 /* Estilo para os parágrafos que exibem a hora atual */
 .registrar-container p {
-  font-size: 18px;
-  color: #102144; /* Azul escuro */
+  font-size: 28px;
   margin-bottom: 20px;
   animation: fadeInUp 0.6s ease-in-out; /* Animação de fade-in up */
 }
@@ -75,7 +74,7 @@
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background-color: #6797ff; /* Azul pastel claro */
+  background-color: #ffffff3d; /* Azul pastel claro */
   color: #ffffff; /* Branco */
   font-size: 16px;
   cursor: pointer;
@@ -98,7 +97,7 @@
 
 /* Estilo para o botão ao passar o mouse */
 .registrar-container button:hover {
-  background-color: #355286; /* Azul pastel médio */
+  background-color: var(--cor-gradiente-opacity); /* Azul pastel médio */
   transform: scale(1.02); /* Leve aumento ao passar o mouse */
 }
 
